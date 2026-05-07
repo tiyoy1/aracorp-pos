@@ -8,7 +8,7 @@ use Override;
 
 class TransactionItem extends Model
 {
-    protected $fillable = ['quantity', 'price'];
+    protected $fillable = ['quantity', 'price', 'subtotal'];
 
     public function transaction(): BelongsTo {
         return $this->belongsTo(Transaction::class);

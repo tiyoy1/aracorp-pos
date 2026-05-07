@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Transaction extends Model
 {
-    protected $fillable = ['total_price'];
+    protected $fillable = ['invoice_number','total_price'];
 
     public function transaction_item(): HasMany {
         return $this->hasMany(TransactionItem::class);
