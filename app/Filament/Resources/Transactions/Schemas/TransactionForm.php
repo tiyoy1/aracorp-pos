@@ -12,9 +12,11 @@ class TransactionForm
         return $schema
             ->components([
                 TextInput::make('total_price')
-                    ->required()
                     ->numeric()
+                    ->nullable()
                     ->prefix('$'),
+                TextInput::make('invoice_number')
+                    ->required(),
             ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\TransactionItems\Schemas;
 
+use App\Models\Product;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -17,14 +18,20 @@ class TransactionItemForm
                     ->required(),
                 Select::make('product_id')
                     ->relationship('product', 'name')
-                    ->required(),
+                    ->searchable()
+                    ->required()
+                    ->reactive()
+                    ->afterStateUpdated(function($state, callable $set) {
+                        $product = Product::find($state);
+                        $set('price', $product?->price ?? 0);
+                    }),
                 TextInput::make('quantity')
                     ->required()
                     ->numeric(),
                 TextInput::make('price')
-                    ->required()
+                    ->dehydrated()
                     ->numeric()
-                    ->prefix('$'),
+                    ->disabled(),
             ]);
     }
 }

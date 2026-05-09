@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Override;
 
 class Transaction extends Model
 {
@@ -11,5 +12,11 @@ class Transaction extends Model
 
     public function transaction_item(): HasMany {
         return $this->hasMany(TransactionItem::class);
+    }
+
+    #[Override]
+    public function __toString()
+    {
+        return $this->invoice_number;
     }
 }

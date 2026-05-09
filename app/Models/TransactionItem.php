@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Override;
 
 class TransactionItem extends Model
 {
-    protected $fillable = ['quantity', 'price', 'subtotal'];
+    protected $fillable = ['transaction_id','product_id','quantity', 'price', 'subtotal'];
 
     public function transaction(): BelongsTo {
         return $this->belongsTo(Transaction::class);
@@ -16,6 +17,10 @@ class TransactionItem extends Model
 
     public function product(): BelongsTo {
         return $this->belongsTo(Product::class);
+    }
+
+    public function stockMovement(): HasOne {
+        return $this->hasOne(StockMovement::class);
     }
 
     #[Override]

@@ -6,7 +6,9 @@ use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use App\Models\StockMovement;
+use App\Models\TransactionItem;
 use App\Observers\StockMovementObserver;
+use App\Observers\TransactionItemObserver;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -26,8 +28,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        TransactionItem::observe(TransactionItemObserver::class);
         StockMovement::observe(StockMovementObserver::class);
     }
+    
 
     /**
      * Configure default behaviors for production-ready applications.
