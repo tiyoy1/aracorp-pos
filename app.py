@@ -2,19 +2,19 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-@app.route('/test-python', methods=['POST'])
+@app.route('/process', methods=['POST'])
 def process() :
     data = request.json
-    text = data['text']
-    result = f"python processed: {text.upper()}"
-    return jsonify({'result' : result})
+    text = data['upper_text']
+    result_upper = f"python processed: {text.upper()}"
+    return jsonify({'result_upper' : result_upper})
 
-@app.route('/test-python', methods=['POST'])
+@app.route('/reverse', methods=['POST'])
 def reverse() :
     data = request.json
-    text = data['text']
-    result = text[::-1]
-    return jsonify({'result' : result})
+    text = data['reverse_text']
+    result_reverse = text[::-1]
+    return jsonify({'result_reverse' : result_reverse})
 
 if __name__ == '__main__':
     app.run(port=5000)

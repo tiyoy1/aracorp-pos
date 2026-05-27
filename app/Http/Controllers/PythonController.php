@@ -18,28 +18,28 @@ class PythonController extends Controller
 
     public function process(Request $request) {
         $request->validate([
-            'text' => 'required|string'
+            'upper_text' => 'required|string'
         ]);
 
         $response = Http::post('http://localhost:5000/process', [
-            'text' => $request->input('text')
+            'upper_text' => $request->input('upper_text')
         ]);
 
-        $result = $response->json()['result'];
-        return back()->with('result', $result);
+        $result = $response->json()['result_upper'];
+        return back()->with('result_upper', $result);
     }
 
     public function reverse(Request $request) {
         $request->validate([
-            'text' => 'required|string'
+            'reverse_text' => 'required|string'
         ]);
 
         $response = Http::post('http://localhost:5000/reverse', [
-            'text' => $request->input('text')
+            'reverse_text' => $request->input('reverse_text')
         ]);
 
-        $result = $response -> json()['result'];
-        return back()->with('result', $result);
+        $result = $response -> json()['result_reverse'];
+        return back()->with('result_reverse', $result);
     }
 
     /**

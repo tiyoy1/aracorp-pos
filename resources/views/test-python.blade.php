@@ -8,27 +8,27 @@
 <body>
     <h1>Laravel + Python trial</h1>
 
-    @if(session('result')) 
+    @if(session('result_upper')) 
         <div style="background:green; color: white; padding: 10px;">
-            Python returned : {{ session('result') }}
+            Python returned : {{ session('result_upper') }}
         </div>
     @endif
 
     <form action="/process" method="POST">
         @csrf
-        <input type="text" placeholder="isi apa kek" name="text">
+        <input type="text" placeholder="isi apa kek" name="upper_text">
         <button type="submit">Send to PyUpper</button>
     </form>
 
-    @if(session('result')) 
+    @if(session('result_reverse')) 
         <div style="background:black; color: white; padding: 10px;">
-            Python returned : {{ session('result') }}
+            Python returned : {{ session('result_reverse') }}
         </div>
     @endif
 
     <form action="/reverse" method="POST">
         @csrf
-        <input type="text" placeholder="reversal" name="text">
+        <input type="text" placeholder="reversal" name="reverse_text">
         <button type="submit">Send to PyReverse</button>
     </form>
 
