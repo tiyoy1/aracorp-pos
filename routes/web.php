@@ -1,8 +1,13 @@
 <?php
 
+use App\Http\Controllers\PythonController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
+
+Route::resource('/test-python', PythonController::class);
+Route::post('/process', [PythonController::class, 'process']);
+Route::post('/reverse', [PythonController::class, 'reverse']);
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');

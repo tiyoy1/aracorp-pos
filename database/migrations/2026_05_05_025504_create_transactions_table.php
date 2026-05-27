@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('transaction_items_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('invoice_number');
             $table->decimal('total_price', 12, 2)->default(0);
             $table->timestamps();

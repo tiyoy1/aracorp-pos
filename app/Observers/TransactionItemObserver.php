@@ -16,6 +16,7 @@ class TransactionItemObserver
         $transactionItem->transaction->increment('total_price', $transactionItem->subtotal);
         
         StockMovement::create([
+            'transaction_item_id' => $transactionItem->id,
             'product_id' => $transactionItem->product_id,
             'type' => 'out',
             'quantity' => $transactionItem->quantity,
