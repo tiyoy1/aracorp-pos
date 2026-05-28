@@ -8,6 +8,7 @@ Route::view('/', 'welcome')->name('home');
 Route::resource('/test-python', PythonController::class);
 Route::post('/process', [PythonController::class, 'process']);
 Route::post('/reverse', [PythonController::class, 'reverse']);
+Route::post('/lang_detect', [PythonController::class, 'langDetect']);
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');

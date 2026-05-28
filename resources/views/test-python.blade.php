@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Pythonism</title>
 </head>
 <body>
     <h1>Laravel + Python trial</h1>
@@ -32,5 +32,17 @@
         <button type="submit">Send to PyReverse</button>
     </form>
 
+    @if(session('result_detection')) 
+        <div style="background:pink; color: cyan; padding: 10px;">
+            Your language is : {{ session('result_detection') }}
+        </div>
+    @endif
+
+    <form action="/lang_detect" method="POST">
+        @csrf
+        <input type="text" placeholder="Language Detector" name="predetect_text">
+        <button type="submit">Send to PyDetect</button>
+    </form>
+    
 </body>
 </html>

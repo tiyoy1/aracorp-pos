@@ -42,6 +42,19 @@ class PythonController extends Controller
         return back()->with('result_reverse', $result);
     }
 
+    public function langDetect(Request $request) {
+        $request->validate([
+            'predetect_text' => 'required|string'
+        ]);
+
+        $response = Http::post('http://localhost:5000/lang_detect', [
+            'predetect_text' => $request->input('predetect_text')
+        ]);
+
+        $result = $response -> json()['result_detection'];
+        return back()->with('result_detection', $result);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
