@@ -25,7 +25,10 @@ def translate():
     data = request.json
     text = data.get('predetect_text')
     result_detection = detect(text)
-    return jsonify({'result_detection' : result_detection})
+    lang_probability = detect_langs(text)
+    return jsonify({'result_detection' : result_detection,
+                    'lang_probability' : [str(p) for p in lang_probability]
+                    })
 
 if __name__ == '__main__':
     app.run(port=5000)

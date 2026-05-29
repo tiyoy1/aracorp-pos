@@ -51,8 +51,7 @@ class PythonController extends Controller
             'predetect_text' => $request->input('predetect_text')
         ]);
 
-        $result = $response -> json()['result_detection'];
-        return back()->with('result_detection', $result);
+        return back()->with('lang_result', $response->json());
     }
 
     /**
