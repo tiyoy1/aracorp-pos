@@ -13,11 +13,17 @@ class StockMovementObserver
     {
         $product = $stockMovement->product;
 
-            if ($stockMovement->type === 'in') {
-                $product->increment('stock', $stockMovement->quantity);
-            } else {
-                $product->decrement('stock', $stockMovement->quantity);
-            }
+        if ($stockMovement->type === 'in') {
+            $product->increment('stock', $stockMovement->quantity);
+
+            return;
+        }
+
+        if ($product->stock < $stockMovement->quantity) {
+            throw new \Exception("Insufficient stock for product : {$product->name}");
+        }
+
+        $product->decrement('stock', $stockMovement->quantity);
     }
 
     /**
@@ -28,24 +34,24 @@ class StockMovementObserver
         //
     }
 
-    public function updating(StockMovement $stockMovement) :void 
+    public function updating(StockMovement $stockMovement): void
     {
         $product = $stockMovement->product;
 
-            $oldQuantity = $stockMovement->getOriginal('quantity');
-            $oldType = $stockMovement->getOriginal('type');
+        $oldQuantity = $stockMovement->getOriginal('quantity');
+        $oldType = $stockMovement->getOriginal('type');
 
-            if ($oldType == 'out') {
-                $product->increment('stock', $oldQuantity);
-            } else {
-                $product->decrement('stock', $oldQuantity);
-            }
+        if ($oldType == 'out') {
+            $product->increment('stock', $oldQuantity);
+        } else {
+            $product->decrement('stock', $oldQuantity);
+        }
 
-            if ($stockMovement->type == 'in') {
-                $product -> increment('stock', $stockMovement->quantity);
-            } else {
-                    $product -> decrement('stock', $stockMovement->quantity);
-                }
+        if ($stockMovement->type == 'in') {
+            $product->increment('stock', $stockMovement->quantity);
+        } else {
+            $product->decrement('stock', $stockMovement->quantity);
+        }
     }
 
     /**

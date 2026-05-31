@@ -12,21 +12,25 @@ class TransactionItemObserver
      */
     public function created(TransactionItem $transactionItem): void
     {
-        $this->updateTransactionTotal($transactionItem);
-        $transactionItem->transaction->increment('total_price', $transactionItem->subtotal);
-        
         StockMovement::create([
             'transaction_item_id' => $transactionItem->id,
             'product_id' => $transactionItem->product_id,
             'type' => 'out',
             'quantity' => $transactionItem->quantity,
-            'note' => 'Transaction #0' . $transactionItem->transaction_id,
+            'note' => 'Transaction #0'.$transactionItem->transaction_id,
         ]);
+        $this->updateTransactionTotal($transactionItem);
     }
 
-    public function creating(TransactionItem $transactionItem) : void
+    public function creating(TransactionItem $transactionItem): void
     {
-        $transactionItem->price = $transactionItem->product->price;
+        $product = $transactionItem->product;
+
+        if ($product->stock < $transactionItem->quantity) {
+            throw new \Exception("Insufficient stock for product : {$product->name}");
+        }
+
+        $transactionItem->price = $product->price;
         $transactionItem->subtotal = $transactionItem->price * $transactionItem->quantity;
     }
 
@@ -35,6 +39,11 @@ class TransactionItemObserver
      */
     public function updated(TransactionItem $transactionItem): void
     {
+        if ($transactionItem->wasChanged('quantity')) {
+            $transactionItem->stockMovement()->update([
+                'quantity' => $transactionItem->quantity,
+            ]);
+        }
         $this->updateTransactionTotal($transactionItem);
     }
 
@@ -43,6 +52,7 @@ class TransactionItemObserver
      */
     public function deleted(TransactionItem $transactionItem): void
     {
+        $transactionItem->stockMovement()->delete();
         $this->updateTransactionTotal($transactionItem);
     }
 
@@ -62,11 +72,11 @@ class TransactionItemObserver
         //
     }
 
-    private function updateTransactionTotal (TransactionItem $transactionItem) : void 
+    private function updateTransactionTotal(TransactionItem $transactionItem): void
     {
         $transaction = $transactionItem->transaction;
         $transaction->update([
-            'total_price' => $transaction->transaction_item->sum('subtotal')
+            'total_price' => $transaction->transactionItems->sum('subtotal'),
         ]);
     }
 }
