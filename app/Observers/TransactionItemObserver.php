@@ -39,7 +39,7 @@ class TransactionItemObserver
      */
     public function updated(TransactionItem $transactionItem): void
     {
-        if ($transactionItem->wasChanged('quantity')) {
+        if ($transactionItem->wasChanged('quantity')) { 
             $transactionItem->stockMovement()->update([
                 'quantity' => $transactionItem->quantity,
             ]);

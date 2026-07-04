@@ -30,5 +30,10 @@ def translate():
                     'lang_probability' : [str(p) for p in lang_probability]
                     })
 
+@app.route('/stock_analytic', methods=['GET'])
+def stock_analytic():
+    stockIn = request.json
+    pass
+
 if __name__ == '__main__':
     app.run(port=5000)

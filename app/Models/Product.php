@@ -10,7 +10,7 @@ class Product extends Model
 {
     protected $fillable = ['name', 'price', 'stock'];
 
-    public function stock(): HasMany {
+    public function stockMovement(): HasMany {
         return $this->hasMany(StockMovement::class);
     }
 
