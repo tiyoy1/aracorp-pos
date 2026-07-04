@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
-    protected $fillable = ['name', 'price', 'stock'];
+    protected $fillable = ['name', 'category', 'price', 'stock'];
 
     public function stockMovement(): HasMany {
         return $this->hasMany(StockMovement::class);
