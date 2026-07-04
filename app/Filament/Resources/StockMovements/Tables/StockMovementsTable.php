@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -15,22 +16,40 @@ class StockMovementsTable
     {
         return $table
             ->columns([
-                TextColumn::make('product_id')
-                    ->numeric()
-                    ->sortable(),
+                // Show product name instead of ID
+                TextColumn::make('product.name')
+                    ->label('Product')
+                    ->searchable()
+                    ->weight('semibold'),
+
                 TextColumn::make('type')
-                    ->searchable(),
+                    ->label('Type')
+                    ->badge()
+                    ->color(fn(string $state): string => match($state) {
+                        'in'  => 'success',
+                        'out' => 'danger',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn(string $state): string => strtoupper($state)),
+
                 TextColumn::make('quantity')
+                    ->label('Quantity')
                     ->numeric()
                     ->sortable(),
+
                 TextColumn::make('note')
-                    ->searchable(),
+                    ->label('Note')
+                    ->searchable()
+                    ->color('gray'),
+
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Date')
+                    ->dateTime('d M Y, H:i')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: false),
+
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->dateTime('d M Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
@@ -45,6 +64,7 @@ class StockMovementsTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 }

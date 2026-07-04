@@ -18,9 +18,11 @@ use Filament\Tables\Table;
 
 class ProductResource extends Resource
 {
-    protected static ?string $model = Product::class;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShoppingBag;
+    protected static string|\UnitEnum|null $navigationGroup = 'Inventory';
+    protected static ?int $navigationSort = 1;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?string $model = Product::class;
 
     public static function form(Schema $schema): Schema
     {

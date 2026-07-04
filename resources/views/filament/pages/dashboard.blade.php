@@ -1,4 +1,4 @@
-<!-- <x-filament-panels::page>
+<x-filament-panels::page>
 <style>
     .analytics-wrapper {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -306,4 +306,4 @@
 
     @endif
 </div>
-</x-filament-panels::page> -->
+</x-filament-panels::page>

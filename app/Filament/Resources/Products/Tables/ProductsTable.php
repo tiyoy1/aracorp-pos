@@ -16,18 +16,34 @@ class ProductsTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->searchable(),
+                    ->label('Product Name')
+                    ->searchable()
+                    ->weight('semibold'),
+
                 TextColumn::make('price')
-                    ->searchable(),
-                TextColumn::make('stock')
-                    ->numeric()
+                    ->label('Price')
+                    ->money('IDR')
                     ->sortable(),
+
+                TextColumn::make('stock')
+                    ->label('Stock')
+                    ->numeric()
+                    ->sortable()
+                    ->badge()
+                    ->color(fn(int $state): string => match(true) {
+                        $state <= 3  => 'danger',
+                        $state <= 10 => 'warning',
+                        default      => 'success',
+                    }),
+
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Created')
+                    ->dateTime('d M Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->dateTime('d M Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

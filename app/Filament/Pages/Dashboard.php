@@ -4,28 +4,23 @@ namespace App\Filament\Pages;
 
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\Http;
-use Filament\Support\Icons\Heroicon;
-use BackedEnum;
 
-
-class Analytics extends Page
+class Dashboard extends Page  // ← extend Page, not BaseDashboard
 {
-    protected static bool $shouldRegisterNavigation = false;
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPresentationChartLine;
-    protected static string|\UnitEnum|null $navigationGroup = 'Operations';
-    protected static ?int $navigationSort = 2;
-    protected string $view = 'filament.pages.analytics';
-    protected static ?string $navigationLabel = 'Analytics';
-    protected static ?string $title = '📊 Sales Analytics';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-home';
+    protected string $view = 'filament.pages.dashboard';
+    protected static ?string $navigationLabel = 'Overview';
+    protected static ?string $title = 'Overview';
 
-    // All analytics data
+    protected static ?int $navigationSort = -1; // ← keeps it at top
+    protected static string|\UnitEnum|null $navigationGroup = '';
+
     public array $summary = [];
     public array $bestSellers = [];
     public array $dailyRevenue = [];
     public array $lowStock = [];
     public array $today = [];
 
-    // Python analytics base URL
     protected string $analyticsUrl = 'http://localhost:5001';
 
     public function mount(): void
@@ -57,7 +52,6 @@ class Analytics extends Page
                 ->json() ?? [];
 
         } catch (\Exception $e) {
-            // Python server unavailable — fail gracefully
             $this->summary = [];
             $this->bestSellers = [];
             $this->dailyRevenue = [];
@@ -66,7 +60,6 @@ class Analytics extends Page
         }
     }
 
-    // Refresh button
     public function refresh(): void
     {
         $this->loadAnalytics();

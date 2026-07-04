@@ -1,0 +1,299 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@import '/vendor/filament/filament/resources/css/theme.css';
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+    font-family: var(--font-family) !important;
+}
+
+/* ── SIDEBAR ── */
+.fi-sidebar {
+    background-color: #1A1A1A !important;
+    border-right: none !important;
+}
+
+.fi-sidebar-nav-item-label {
+    color: #A0A0A0 !important;
+    font-size: 0.875rem !important;
+}
+
+.fi-sidebar-item-button:hover .fi-sidebar-nav-item-label {
+    color: #F7F7F7 !important;
+}
+
+.fi-sidebar-item-button:hover {
+    background-color: #2A2A2A !important;
+    border-radius: 0.5rem !important;
+}
+
+.fi-sidebar-item-active .fi-sidebar-nav-item-label {
+    color: #F7F7F7 !important;
+}
+
+.fi-sidebar-item-active > .fi-sidebar-item-button {
+    background-color: #F46700 !important;
+    border-radius: 0.5rem !important;
+}
+
+.fi-sidebar-nav-item-icon {
+    color: #828282 !important;
+}
+
+.fi-sidebar-item-active .fi-sidebar-nav-item-icon {
+    color: #F7F7F7 !important;
+}
+
+/* Brand name */
+.fi-logo {
+    color: #F46700 !important;
+    font-weight: 800 !important;
+    font-size: 1.25rem !important;
+    letter-spacing: -0.025em !important;
+}
+
+/* ── TOPBAR ── */
+.fi-topbar {
+    background-color: #FFFFFF !important;
+    border-bottom: 1px solid #EFEFEF !important;
+}
+
+/* ── PAGE CONTENT ── */
+.fi-main {
+    background-color: #F7F7F7 !important;
+}
+
+.fi-page-header-heading {
+    font-weight: 800 !important;
+    color: #1A1A1A !important;
+    letter-spacing: -0.025em !important;
+}
+
+/* ── CARDS / SECTIONS ── */
+.fi-section {
+    background-color: #FFFFFF !important;
+    border: 1px solid #EFEFEF !important;
+    border-radius: 0.875rem !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
+}
+
+.fi-section-header {
+    border-bottom: 1px solid #F5F5F5 !important;
+}
+
+.fi-section-header-heading {
+    font-weight: 700 !important;
+    color: #1A1A1A !important;
+}
+
+/* ── TABLES ── */
+.fi-ta-content {
+    background-color: #FFFFFF !important;
+    border-radius: 0.875rem !important;
+    border: 1px solid #EFEFEF !important;
+    overflow: hidden !important;
+}
+
+.fi-ta-header-cell {
+    background-color: #F7F7F7 !important;
+    color: #828282 !important;
+    font-size: 0.7rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+}
+
+.fi-ta-row:hover td {
+    background-color: #FFF8F3 !important;
+}
+
+/* ── BUTTONS ── */
+.fi-btn-primary {
+    background-color: #F46700 !important;
+    border-color: #F46700 !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    border-radius: 0.625rem !important;
+    box-shadow: 0 2px 8px rgba(244,103,0,0.25) !important;
+}
+
+.fi-btn-primary:hover {
+    background-color: #D45A00 !important;
+    border-color: #D45A00 !important;
+    box-shadow: 0 4px 12px rgba(244,103,0,0.35) !important;
+}
+
+.fi-btn-outlined {
+    border-color: #EFEFEF !important;
+    color: #1A1A1A !important;
+    border-radius: 0.625rem !important;
+}
+
+.fi-btn-outlined:hover {
+    border-color: #F46700 !important;
+    color: #F46700 !important;
+}
+
+/* ── FORMS ── */
+.fi-input {
+    border-color: #E5E5E5 !important;
+    border-radius: 0.625rem !important;
+    background-color: #FFFFFF !important;
+    color: #1A1A1A !important;
+}
+
+.fi-input:focus {
+    border-color: #F46700 !important;
+    box-shadow: 0 0 0 3px rgba(244,103,0,0.15) !important;
+    outline: none !important;
+}
+
+.fi-label {
+    color: #1A1A1A !important;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+}
+
+/* ── BADGES ── */
+.fi-badge-primary {
+    background-color: #FFF0E6 !important;
+    color: #F46700 !important;
+    font-weight: 600 !important;
+    border-radius: 2rem !important;
+}
+
+/* ── STATS WIDGETS ── */
+.fi-wi-stats-overview-stat {
+    background-color: #FFFFFF !important;
+    border: 1px solid #EFEFEF !important;
+    border-radius: 0.875rem !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
+}
+
+.fi-wi-stats-overview-stat-value {
+    color: #F46700 !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.025em !important;
+}
+
+/* ── NOTIFICATIONS ── */
+.fi-no-notification {
+    border-radius: 0.875rem !important;
+    border: 1px solid #EFEFEF !important;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08) !important;
+}
+
+/* ── PAGINATION ── */
+.fi-pagination-item-is-active {
+    background-color: #F46700 !important;
+    color: #FFFFFF !important;
+    border-radius: 0.5rem !important;
+}
+
+/* ── CHECKBOXES + TOGGLES ── */
+.fi-checkbox-input:checked {
+    background-color: #F46700 !important;
+    border-color: #F46700 !important;
+}
+
+.fi-toggle-input:checked {
+    background-color: #F46700 !important;
+}
+
+/* ── DROPDOWN MENUS ── */
+.fi-dropdown-list {
+    border-radius: 0.875rem !important;
+    border: 1px solid #EFEFEF !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08) !important;
+}
+
+.fi-dropdown-list-item-button:hover {
+    background-color: #FFF8F3 !important;
+    color: #F46700 !important;
+}
+
+.fi-dropdown-panel {
+    background-color: #FFFFFF !important;
+    border: 1px solid #EFEFEF !important;
+    border-radius: 0.875rem !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08) !important;
+}
+
+.fi-dropdown-list-item-label {
+    color: #1A1A1A !important;
+}
+
+.fi-dropdown-list-item-button:hover {
+    background-color: #FFF8F3 !important;
+}
+
+.fi-user-menu-button {
+    color: #1A1A1A !important;
+}
+
+.fi-color-mode-switcher {
+    display: none !important;
+}
+
+.fi-sidebar-item-active > .fi-sidebar-item-button {
+    background-color: #F46700 !important;
+    border-radius: 0.625rem !important;
+    box-shadow: 0 2px 8px rgba(244,103,0,0.3) !important;
+}
+
+.fi-sidebar-item-active .fi-sidebar-nav-item-label {
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+}
+
+.fi-sidebar-item-active .fi-sidebar-nav-item-icon {
+    color: #FFFFFF !important;
+}
+
+/* Hide theme switcher */
+.fi-color-mode-switcher {
+    display: none !important;
+}
+
+/* Force light mode even if dark is selected */
+html.dark .fi-sidebar {
+    background-color: #1A1A1A !important;
+}
+
+html.dark .fi-main {
+    background-color: #F7F7F7 !important;
+    color: #1A1A1A !important;
+}
+
+html.dark .fi-topbar {
+    background-color: #FFFFFF !important;
+}
+
+/* Navigation group labels */
+.fi-sidebar-group-label {
+    color: #F46700 !important;
+    font-size: 0.65rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    padding: 0.75rem 0.875rem 0.25rem !important;
+}
+
+/* Subtle divider between groups */
+.fi-sidebar-group {
+    border-top: 1px solid #2A2A2A !important;
+    padding-top: 0.25rem !important;
+    margin-top: 0.25rem !important;
+}
+
+.fi-sidebar-group:first-child {
+    border-top: none !important;
+}
+
+@source '../../../../app/Filament/**/*';
+@source '../../../../resources/views/filament/**/*';

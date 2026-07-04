@@ -7,12 +7,16 @@ use App\Models\Transaction;
 use App\Models\TransactionItem;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Icon;
+use BackedEnum;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Collection;
+use Filament\Support\Icons\Heroicon;
 
 class Cashier extends Page
 {
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-shopping-cart';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedComputerDesktop;
+    protected static string|\UnitEnum|null $navigationGroup = 'Operations';
+    protected static ?int $navigationSort = 2;
     protected string $view = 'filament.pages.cashier';
     protected static ?string $navigationLabel = 'Cashier';
     protected static ?string $title = '🛒 Cashier';

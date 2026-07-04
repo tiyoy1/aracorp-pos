@@ -15,15 +15,26 @@ class TransactionsTable
     {
         return $table
             ->columns([
+                // Add invoice number column
+                TextColumn::make('invoice_number')
+                    ->label('Invoice')
+                    ->searchable()
+                    ->weight('semibold')
+                    ->color('primary'),
+
                 TextColumn::make('total_price')
-                    ->money()
-                    ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Total')
+                    ->money('IDR')  // ← fix $ to Rp
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->weight('semibold'),
+
+                TextColumn::make('created_at')
+                    ->label('Date')
+                    ->dateTime('d M Y, H:i')
+                    ->sortable(),
+
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->dateTime('d M Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
@@ -38,6 +49,7 @@ class TransactionsTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 }

@@ -15,22 +15,36 @@ class TransactionItemsTable
     {
         return $table
             ->columns([
-                TextColumn::make('transaction.id')
-                    ->searchable(),
+                // Show invoice number instead of raw ID
+                TextColumn::make('transaction.invoice_number')
+                    ->label('Invoice')
+                    ->searchable()
+                    ->weight('semibold')
+                    ->color('primary'),
+
                 TextColumn::make('product.name')
+                    ->label('Product')
                     ->searchable(),
+
                 TextColumn::make('quantity')
+                    ->label('Qty')
                     ->numeric()
                     ->sortable(),
+
                 TextColumn::make('price')
-                    ->money()
+                    ->label('Unit Price')
+                    ->money('IDR')  // ← fix $ to Rp
                     ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
+
+                TextColumn::make('subtotal')
+                    ->label('Subtotal')
+                    ->money('IDR')  // ← fix $ to Rp
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->weight('semibold'),
+
+                TextColumn::make('created_at')
+                    ->label('Date')
+                    ->dateTime('d M Y, H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
@@ -45,6 +59,7 @@ class TransactionItemsTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 }
