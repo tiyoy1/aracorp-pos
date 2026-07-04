@@ -5,10 +5,10 @@ A modern Point of Sale system built with Laravel + Python.
 ## Screenshots
 
 ### Cashier Screen
-<img width="1828" height="863" alt="Screenshot 2026-07-04 100046" src="https://github.com/user-attachments/assets/0dd9dc24-9e69-44ce-96ef-124f58942c70" />
+<img width="1832" height="865" alt="image" src="https://github.com/user-attachments/assets/d73fd5d8-27b7-4aba-bdbb-72fde7cdaa32" />
 
 ### Analytics Dashboard
-<img width="1858" height="870" alt="Screenshot 2026-07-04 100022" src="https://github.com/user-attachments/assets/850c9fe5-e62f-4180-83af-0f98d24142d9" />
+<img width="1857" height="873" alt="image" src="https://github.com/user-attachments/assets/67f15bc2-a344-480e-85c9-9cbfc3bfbf82" />
 
 ## Tech Stack
 - Laravel 13 + Filament
