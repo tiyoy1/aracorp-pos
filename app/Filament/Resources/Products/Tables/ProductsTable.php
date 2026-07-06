@@ -20,6 +20,18 @@ class ProductsTable
                     ->searchable()
                     ->weight('semibold'),
 
+                TextColumn::make('category')
+                    ->label('Category')
+                    ->badge()
+                    ->color('primary')
+                    ->searchable(),
+
+                TextColumn::make('cost_price')
+                    ->label('Cost')
+                    ->money('IDR')
+                    ->sortable()
+                    ->color('gray'),
+
                 TextColumn::make('price')
                     ->label('Price')
                     ->money('IDR')

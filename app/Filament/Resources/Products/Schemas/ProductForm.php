@@ -29,7 +29,15 @@ class ProductForm
                     ->searchable()
                     ->required(),
 
+                TextInput::make('cost_price')
+                    ->label('Cost Price')
+                    ->numeric()
+                    ->prefix('Rp')
+                    ->default(0)
+                    ->helperText('Auto-updated when a Purchase Order is received. Can be set manually for new products.'),
+
                 TextInput::make('price')
+                    ->label('Selling Price')
                     ->required()
                     ->numeric()
                     ->prefix('Rp'),

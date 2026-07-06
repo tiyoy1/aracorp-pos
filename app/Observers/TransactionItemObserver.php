@@ -31,6 +31,7 @@ class TransactionItemObserver
         }
 
         $transactionItem->price = $product->price;
+        $transactionItem->cost_price = $product->cost_price;
         $transactionItem->subtotal = $transactionItem->price * $transactionItem->quantity;
     }
 

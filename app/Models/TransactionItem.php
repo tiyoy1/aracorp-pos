@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class TransactionItem extends Model
 {
-    protected $fillable = ['transaction_id', 'product_id', 'quantity', 'price', 'subtotal'];
+    protected $fillable = ['transaction_id', 'product_id', 'quantity', 'price', 'cost_price', 'subtotal'];
 
     public function transaction(): BelongsTo
     {

@@ -20,6 +20,13 @@ class Dashboard extends Page  // ← extend Page, not BaseDashboard
     public array $dailyRevenue = [];
     public array $lowStock = [];
     public array $today = [];
+    public array $revenueChart = [];
+    public array $categoryChart = [];
+    public array $hourlyChart = [];
+    public array $profitSummary = [];
+    public array $profitToday = [];
+    public array $profitTrend = [];
+    public array $profitByProduct = [];
 
     protected string $analyticsUrl = 'http://localhost:5001';
 
@@ -31,6 +38,35 @@ class Dashboard extends Page  // ← extend Page, not BaseDashboard
     public function loadAnalytics(): void
     {
         try {
+
+        $this->profitSummary = Http::timeout(5)
+    ->get("{$this->analyticsUrl}/analytics/profit-summary")
+    ->json() ?? [];
+
+$this->profitToday = Http::timeout(5)
+    ->get("{$this->analyticsUrl}/analytics/profit-today")
+    ->json() ?? [];
+
+$this->profitTrend = Http::timeout(5)
+    ->get("{$this->analyticsUrl}/analytics/profit-trend")
+    ->json() ?? [];
+
+$this->profitByProduct = Http::timeout(5)
+    ->get("{$this->analyticsUrl}/analytics/profit-by-product")
+    ->json() ?? [];
+            
+            $this->revenueChart = Http::timeout(5)
+    ->get("{$this->analyticsUrl}/analytics/revenue-chart")
+    ->json() ?? [];
+
+$this->categoryChart = Http::timeout(5)
+    ->get("{$this->analyticsUrl}/analytics/category-chart")
+    ->json() ?? [];
+
+$this->hourlyChart = Http::timeout(5)
+    ->get("{$this->analyticsUrl}/analytics/hourly-chart")
+    ->json() ?? [];
+
             $this->summary = Http::timeout(5)
                 ->get("{$this->analyticsUrl}/analytics/summary")
                 ->json() ?? [];

@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use App\Models\StockMovement;
 use App\Models\TransactionItem;
+use App\Models\PurchaseOrder;
+use App\Models\PurchaseOrderItem;
+use App\Observers\PurchaseOrderObserver;
+use App\Observers\PurchaseOrderItemObserver;
 use App\Observers\StockMovementObserver;
 use App\Observers\TransactionItemObserver;
 use Illuminate\Support\ServiceProvider;
@@ -30,6 +34,8 @@ class AppServiceProvider extends ServiceProvider
         $this->configureDefaults();
         TransactionItem::observe(TransactionItemObserver::class);
         StockMovement::observe(StockMovementObserver::class);
+        PurchaseOrder::observe(PurchaseOrderObserver::class);
+        PurchaseOrderItem::observe(PurchaseOrderItemObserver::class);
     }
     
 

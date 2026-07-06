@@ -110,5 +110,195 @@ def today_summary():
         'revenue': int(df['revenue'][0]),
     })
 
+# ── 6. Revenue Line Chart (last 14 days) ──────────
+@app.route('/analytics/revenue-chart', methods=['GET'])
+def revenue_chart():
+    query = '''
+        SELECT 
+            DATE(created_at) as date,
+            SUM(total_price) as revenue
+        FROM transactions
+        GROUP BY DATE(created_at)
+        ORDER BY date ASC
+        LIMIT 14
+    '''
+    df = pd.read_sql(query, engine)
+
+    if df.empty:
+        return jsonify({'dates': [], 'values': []})
+
+    df['date'] = df['date'].astype(str)
+    df['revenue'] = df['revenue'].astype(int)
+
+    return jsonify({
+        'dates': df['date'].tolist(),
+        'values': df['revenue'].tolist()
+    })
+
+# ── 7. Category Pie Chart ─────────────────────────
+@app.route('/analytics/category-chart', methods=['GET'])
+def category_chart():
+    query = '''
+        SELECT 
+            COALESCE(p.category, 'Uncategorized') as category,
+            SUM(ti.subtotal) as revenue
+        FROM transaction_items ti
+        JOIN products p ON p.id = ti.product_id
+        GROUP BY p.category
+        ORDER BY revenue DESC
+    '''
+    df = pd.read_sql(query, engine)
+
+    if df.empty:
+        return jsonify({'labels': [], 'values': []})
+
+    return jsonify({
+        'labels': df['category'].tolist(),
+        'values': df['revenue'].astype(int).tolist()
+    })
+
+# ── 8. Hourly Sales Bar Chart ─────────────────────
+@app.route('/analytics/hourly-chart', methods=['GET'])
+def hourly_chart():
+    query = '''
+        SELECT 
+            HOUR(created_at) as hour,
+            COUNT(*) as transactions,
+            SUM(total_price) as revenue
+        FROM transactions
+        GROUP BY HOUR(created_at)
+        ORDER BY hour ASC
+    '''
+    df = pd.read_sql(query, engine)
+
+    if df.empty:
+        return jsonify({'hours': [], 'transactions': [], 'revenue': []})
+
+    # Fill missing hours with 0
+    all_hours = pd.DataFrame({'hour': range(24)})
+    df = all_hours.merge(df, on='hour', how='left').fillna(0)
+
+    return jsonify({
+        'hours': [f"{int(h):02d}:00" for h in df['hour'].tolist()],
+        'transactions': df['transactions'].astype(int).tolist(),
+        'revenue': df['revenue'].astype(int).tolist()
+    })
+
+# ── 9. Profit Summary ─────────────────────────────
+@app.route('/analytics/profit-summary', methods=['GET'])
+def profit_summary():
+    query = '''
+        SELECT 
+            SUM(subtotal) as revenue,
+            SUM(quantity * cost_price) as cogs
+        FROM transaction_items
+    '''
+    df = pd.read_sql(query, engine)
+
+    if df.empty or df['revenue'][0] is None:
+        return jsonify({
+            'revenue': 0,
+            'cogs': 0,
+            'gross_profit': 0,
+            'margin_percent': 0
+        })
+
+    revenue = float(df['revenue'][0] or 0)
+    cogs = float(df['cogs'][0] or 0)
+    gross_profit = revenue - cogs
+    margin = (gross_profit / revenue * 100) if revenue > 0 else 0
+
+    return jsonify({
+        'revenue': int(revenue),
+        'cogs': int(cogs),
+        'gross_profit': int(gross_profit),
+        'margin_percent': round(margin, 1)
+    })
+
+# ── 10. Today's Profit ────────────────────────────
+@app.route('/analytics/profit-today', methods=['GET'])
+def profit_today():
+    query = '''
+        SELECT 
+            SUM(ti.subtotal) as revenue,
+            SUM(ti.quantity * ti.cost_price) as cogs
+        FROM transaction_items ti
+        JOIN transactions t ON t.id = ti.transaction_id
+        WHERE DATE(t.created_at) = CURDATE()
+    '''
+    df = pd.read_sql(query, engine)
+
+    if df.empty or df['revenue'][0] is None:
+        return jsonify({'gross_profit': 0, 'margin_percent': 0})
+
+    revenue = float(df['revenue'][0] or 0)
+    cogs = float(df['cogs'][0] or 0)
+    gross_profit = revenue - cogs
+    margin = (gross_profit / revenue * 100) if revenue > 0 else 0
+
+    return jsonify({
+        'gross_profit': int(gross_profit),
+        'margin_percent': round(margin, 1)
+    })
+
+# ── 11. Profit Trend (last 14 days) ──────────────
+@app.route('/analytics/profit-trend', methods=['GET'])
+def profit_trend():
+    query = '''
+        SELECT 
+            DATE(t.created_at) as date,
+            SUM(ti.subtotal) as revenue,
+            SUM(ti.quantity * ti.cost_price) as cogs
+        FROM transaction_items ti
+        JOIN transactions t ON t.id = ti.transaction_id
+        GROUP BY DATE(t.created_at)
+        ORDER BY date ASC
+        LIMIT 14
+    '''
+    df = pd.read_sql(query, engine)
+
+    if df.empty:
+        return jsonify({'dates': [], 'profit': [], 'revenue': []})
+
+    df['date'] = df['date'].astype(str)
+    df['revenue'] = df['revenue'].fillna(0).astype(int)
+    df['cogs'] = df['cogs'].fillna(0).astype(int)
+    df['profit'] = df['revenue'] - df['cogs']
+
+    return jsonify({
+        'dates': df['date'].tolist(),
+        'profit': df['profit'].tolist(),
+        'revenue': df['revenue'].tolist()
+    })
+
+# ── 12. Profit By Product ─────────────────────────
+@app.route('/analytics/profit-by-product', methods=['GET'])
+def profit_by_product():
+    query = '''
+        SELECT 
+            p.name,
+            SUM(ti.subtotal) as revenue,
+            SUM(ti.quantity * ti.cost_price) as cogs
+        FROM transaction_items ti
+        JOIN products p ON p.id = ti.product_id
+        GROUP BY p.id, p.name
+        ORDER BY revenue DESC
+        LIMIT 5
+    '''
+    df = pd.read_sql(query, engine)
+
+    if df.empty:
+        return jsonify([])
+
+    df['revenue'] = df['revenue'].fillna(0).astype(int)
+    df['cogs'] = df['cogs'].fillna(0).astype(int)
+    df['gross_profit'] = df['revenue'] - df['cogs']
+    df['margin_percent'] = df.apply(
+        lambda r: round((r['gross_profit'] / r['revenue'] * 100), 1) if r['revenue'] > 0 else 0,
+        axis=1
+    )
+
+    return jsonify(df.to_dict(orient='records'))
+
 if __name__ == '__main__':
     app.run(port=5001, debug=True)
