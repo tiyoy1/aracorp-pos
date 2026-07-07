@@ -1,8 +1,20 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request, abort
 from sqlalchemy import create_engine, text
 import pandas as pd
+from functools import wraps
 from dotenv import load_dotenv
 import os
+
+API_KEY = os.getenv('ANALYTICS_API_KEY')
+
+def require_api_key(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        provided_key = request.headers.get('X-API-Key')
+        if not provided_key or provided_key != API_KEY:
+            abort(401, description="Unauthorized: invalid or missing API key")
+        return f(*args, **kwargs)
+    return decorated
 
 load_dotenv()
 
@@ -17,6 +29,7 @@ engine = create_engine(f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_N
 
 #This is for Sales Summary
 @app.route('/analytics/summary', methods=['GET'])
+@require_api_key
 def sales_summary():
     df = pd.read_sql('SELECT * FROM transactions', engine)
 
@@ -35,6 +48,7 @@ def sales_summary():
 
 #This is for best selling products
 @app.route('/analytics/best-sellers', methods=['GET'])
+@require_api_key
 def best_sellers():
     query = '''
         SELECT 
@@ -56,6 +70,7 @@ def best_sellers():
 
 #3. Daily revenue (last 7 days)
 @app.route('/analytics/daily-revenue', methods=['GET'])
+@require_api_key
 def daily_revenue():
     query = '''
         SELECT 
@@ -79,6 +94,7 @@ def daily_revenue():
 
 #4. Low stock products
 @app.route('/analytics/low-stock', methods=['GET'])
+@require_api_key
 def low_stock():
     query = '''
         SELECT name, stock, price
@@ -95,6 +111,7 @@ def low_stock():
 
 #5. Today's summary
 @app.route('/analytics/today', methods=['GET'])
+@require_api_key
 def today_summary():
     query = '''
         SELECT 
@@ -112,6 +129,7 @@ def today_summary():
 
 # ── 6. Revenue Line Chart (last 14 days) ──────────
 @app.route('/analytics/revenue-chart', methods=['GET'])
+@require_api_key
 def revenue_chart():
     query = '''
         SELECT 
@@ -137,6 +155,7 @@ def revenue_chart():
 
 # ── 7. Category Pie Chart ─────────────────────────
 @app.route('/analytics/category-chart', methods=['GET'])
+@require_api_key
 def category_chart():
     query = '''
         SELECT 
@@ -159,6 +178,7 @@ def category_chart():
 
 # ── 8. Hourly Sales Bar Chart ─────────────────────
 @app.route('/analytics/hourly-chart', methods=['GET'])
+@require_api_key
 def hourly_chart():
     query = '''
         SELECT 
@@ -186,6 +206,7 @@ def hourly_chart():
 
 # ── 9. Profit Summary ─────────────────────────────
 @app.route('/analytics/profit-summary', methods=['GET'])
+@require_api_key
 def profit_summary():
     query = '''
         SELECT 
@@ -217,6 +238,7 @@ def profit_summary():
 
 # ── 10. Today's Profit ────────────────────────────
 @app.route('/analytics/profit-today', methods=['GET'])
+@require_api_key
 def profit_today():
     query = '''
         SELECT 
@@ -243,6 +265,7 @@ def profit_today():
 
 # ── 11. Profit Trend (last 14 days) ──────────────
 @app.route('/analytics/profit-trend', methods=['GET'])
+@require_api_key
 def profit_trend():
     query = '''
         SELECT 
@@ -273,6 +296,7 @@ def profit_trend():
 
 # ── 12. Profit By Product ─────────────────────────
 @app.route('/analytics/profit-by-product', methods=['GET'])
+@require_api_key
 def profit_by_product():
     query = '''
         SELECT 

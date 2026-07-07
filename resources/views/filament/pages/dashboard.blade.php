@@ -388,6 +388,7 @@
             <div class="data-card-header">🏆 Best Selling Products</div>
             <div class="data-card-body">
                 @forelse($bestSellers as $index => $item)
+                @php($index = (int) $index)
                     <div class="data-row">
                         <div style="display:flex; align-items:center; flex:1;">
                             <div class="rank-badge {{ $index === 0 ? 'gold' : ($index === 1 ? 'silver' : ($index === 2 ? 'bronze' : '')) }}">

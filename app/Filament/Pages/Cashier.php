@@ -121,6 +121,7 @@ class Cashier extends Page
                 ->warning()
                 ->send();
             return;
+
         }
 
         // Generate invoice number
@@ -130,6 +131,7 @@ class Cashier extends Page
         $transaction = Transaction::create([
             'invoice_number' => $invoice,
             'total_price'    => $this->getTotal(),
+            'cashier_id'     => Auth::id()
         ]);
 
         // Create each transaction item

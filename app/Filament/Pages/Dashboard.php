@@ -54,65 +54,85 @@ class Dashboard extends Page  // ← extend Page, not BaseDashboard
 }
 
     public function loadAnalytics(): void
-    {
-        try {
+{
+    try {
+        $headers = ['X-API-Key' => config('services.analytics.key')];
+
+        $this->summary = Http::timeout(5)
+            ->withHeaders($headers)
+            ->get("{$this->analyticsUrl}/analytics/summary")
+            ->json() ?? [];
+
+        $this->bestSellers = Http::timeout(5)
+            ->withHeaders($headers)
+            ->get("{$this->analyticsUrl}/analytics/best-sellers")
+            ->json() ?? [];
+
+        $this->dailyRevenue = Http::timeout(5)
+            ->withHeaders($headers)
+            ->get("{$this->analyticsUrl}/analytics/daily-revenue")
+            ->json() ?? [];
+
+        $this->lowStock = Http::timeout(5)
+            ->withHeaders($headers)
+            ->get("{$this->analyticsUrl}/analytics/low-stock")
+            ->json() ?? [];
+
+        $this->today = Http::timeout(5)
+            ->withHeaders($headers)
+            ->get("{$this->analyticsUrl}/analytics/today")
+            ->json() ?? [];
+
+        $this->revenueChart = Http::timeout(5)
+            ->withHeaders($headers)
+            ->get("{$this->analyticsUrl}/analytics/revenue-chart")
+            ->json() ?? [];
+
+        $this->categoryChart = Http::timeout(5)
+            ->withHeaders($headers)
+            ->get("{$this->analyticsUrl}/analytics/category-chart")
+            ->json() ?? [];
+
+        $this->hourlyChart = Http::timeout(5)
+            ->withHeaders($headers)
+            ->get("{$this->analyticsUrl}/analytics/hourly-chart")
+            ->json() ?? [];
 
         $this->profitSummary = Http::timeout(5)
-    ->get("{$this->analyticsUrl}/analytics/profit-summary")
-    ->json() ?? [];
+            ->withHeaders($headers)
+            ->get("{$this->analyticsUrl}/analytics/profit-summary")
+            ->json() ?? [];
 
-$this->profitToday = Http::timeout(5)
-    ->get("{$this->analyticsUrl}/analytics/profit-today")
-    ->json() ?? [];
+        $this->profitToday = Http::timeout(5)
+            ->withHeaders($headers)
+            ->get("{$this->analyticsUrl}/analytics/profit-today")
+            ->json() ?? [];
 
-$this->profitTrend = Http::timeout(5)
-    ->get("{$this->analyticsUrl}/analytics/profit-trend")
-    ->json() ?? [];
+        $this->profitTrend = Http::timeout(5)
+            ->withHeaders($headers)
+            ->get("{$this->analyticsUrl}/analytics/profit-trend")
+            ->json() ?? [];
 
-$this->profitByProduct = Http::timeout(5)
-    ->get("{$this->analyticsUrl}/analytics/profit-by-product")
-    ->json() ?? [];
-            
-            $this->revenueChart = Http::timeout(5)
-    ->get("{$this->analyticsUrl}/analytics/revenue-chart")
-    ->json() ?? [];
+        $this->profitByProduct = Http::timeout(5)
+            ->withHeaders($headers)
+            ->get("{$this->analyticsUrl}/analytics/profit-by-product")
+            ->json() ?? [];
 
-$this->categoryChart = Http::timeout(5)
-    ->get("{$this->analyticsUrl}/analytics/category-chart")
-    ->json() ?? [];
-
-$this->hourlyChart = Http::timeout(5)
-    ->get("{$this->analyticsUrl}/analytics/hourly-chart")
-    ->json() ?? [];
-
-            $this->summary = Http::timeout(5)
-                ->get("{$this->analyticsUrl}/analytics/summary")
-                ->json() ?? [];
-
-            $this->bestSellers = Http::timeout(5)
-                ->get("{$this->analyticsUrl}/analytics/best-sellers")
-                ->json() ?? [];
-
-            $this->dailyRevenue = Http::timeout(5)
-                ->get("{$this->analyticsUrl}/analytics/daily-revenue")
-                ->json() ?? [];
-
-            $this->lowStock = Http::timeout(5)
-                ->get("{$this->analyticsUrl}/analytics/low-stock")
-                ->json() ?? [];
-
-            $this->today = Http::timeout(5)
-                ->get("{$this->analyticsUrl}/analytics/today")
-                ->json() ?? [];
-
-        } catch (\Exception $e) {
-            $this->summary = [];
-            $this->bestSellers = [];
-            $this->dailyRevenue = [];
-            $this->lowStock = [];
-            $this->today = [];
-        }
+    } catch (\Exception $e) {
+        $this->summary = [];
+        $this->bestSellers = [];
+        $this->dailyRevenue = [];
+        $this->lowStock = [];
+        $this->today = [];
+        $this->revenueChart = [];
+        $this->categoryChart = [];
+        $this->hourlyChart = [];
+        $this->profitSummary = [];
+        $this->profitToday = [];
+        $this->profitTrend = [];
+        $this->profitByProduct = [];
     }
+}
 
     public function refresh(): void
     {
