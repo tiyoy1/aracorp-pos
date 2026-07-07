@@ -15,6 +15,8 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionResource extends Resource
 {
@@ -22,6 +24,14 @@ class TransactionResource extends Resource
     protected static string|\UnitEnum|null $navigationGroup = 'Sales';
     protected static ?int $navigationSort = 2;
     protected static ?string $model = Transaction::class;
+
+    public static function canAccess(): bool
+{
+    /** @var User|null $user */
+    $user = Auth::user();
+    
+    return $user?->hasAnyRole(['owner', 'manager']) ?? false;
+}
 
     public static function form(Schema $schema): Schema
     {

@@ -10,8 +10,8 @@ Route::post('/process', [PythonController::class, 'process']);
 Route::post('/reverse', [PythonController::class, 'reverse']);
 Route::post('/lang_detect', [PythonController::class, 'langDetect']);
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::view('dashboard', 'dashboard')->name('dashboard');
-});
+// Route::middleware(['auth', 'verified'])->group(function () {
+//     Route::view('dashboard', 'dashboard')->name('dashboard');
+// });
 
-require __DIR__.'/settings.php';
+// require __DIR__.'/settings.php';

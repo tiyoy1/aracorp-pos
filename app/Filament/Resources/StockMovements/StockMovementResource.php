@@ -15,6 +15,8 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class StockMovementResource extends Resource
 {
@@ -22,6 +24,14 @@ class StockMovementResource extends Resource
     protected static string|\UnitEnum|null $navigationGroup = 'Inventory';
     protected static ?int $navigationSort = 2;
     protected static ?string $model = StockMovement::class;
+
+    public static function canAccess(): bool
+{
+    /** @var User|null $user */
+    $user = Auth::user();
+    
+    return $user?->hasAnyRole(['owner', 'manager']) ?? false;
+}
 
     public static function form(Schema $schema): Schema
     {

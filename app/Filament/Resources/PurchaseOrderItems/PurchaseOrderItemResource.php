@@ -13,6 +13,8 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class PurchaseOrderItemResource extends Resource
 {
@@ -21,6 +23,14 @@ class PurchaseOrderItemResource extends Resource
     protected static bool $shouldRegisterNavigation = false;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    public static function canAccess(): bool
+{
+    /** @var User|null $user */
+    $user = Auth::user();
+    
+    return $user?->hasAnyRole(['owner', 'manager']) ?? false;
+}
 
     public static function form(Schema $schema): Schema
     {

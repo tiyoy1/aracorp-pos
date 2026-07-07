@@ -15,6 +15,8 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class SupplierResource extends Resource
 {
@@ -25,6 +27,14 @@ class SupplierResource extends Resource
     protected static ?int $navigationSort = 0; // shows before Products
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    public static function canAccess(): bool
+{
+    /** @var User|null $user */
+    $user = Auth::user();
+    
+    return $user?->hasAnyRole(['owner', 'manager']) ?? false;
+}
 
     public static function form(Schema $schema): Schema
     {

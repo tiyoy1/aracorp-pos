@@ -4,6 +4,8 @@ namespace App\Filament\Pages;
 
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\Http;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class Dashboard extends Page  // ← extend Page, not BaseDashboard
 {
@@ -30,10 +32,26 @@ class Dashboard extends Page  // ← extend Page, not BaseDashboard
 
     protected string $analyticsUrl = 'http://localhost:5001';
 
+//     public static function canAccess(): bool
+// {
+//     /** @var User|null $user */
+//     $user = Auth::user();
+
+//     return $user?->hasAnyRole(['owner', 'manager']) ?? false;
+// }
+
     public function mount(): void
-    {
-        $this->loadAnalytics();
+{
+    /** @var User|null $user */
+    $user = Auth::user();
+
+    if ($user && $user->hasRole('cashier') && !$user->hasAnyRole(['owner', 'manager'])) {
+        $this->redirect('/admin/cashier');
+        return;
     }
+
+    $this->loadAnalytics();
+}
 
     public function loadAnalytics(): void
     {

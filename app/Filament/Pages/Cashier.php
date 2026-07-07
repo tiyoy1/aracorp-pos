@@ -11,6 +11,8 @@ use BackedEnum;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Collection;
 use Filament\Support\Icons\Heroicon;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class Cashier extends Page
 {
@@ -27,6 +29,13 @@ class Cashier extends Page
     // Cart state — keyed by product_id
     public array $cart = [];
 
+    public static function canAccess(): bool
+{
+    /** @var User|null $user */
+    $user = Auth::user();
+
+    return $user?->hasAnyRole(['owner', 'manager', 'cashier']) ?? false;
+}
     // Get filtered products
     public function getProducts(): Collection
     {
