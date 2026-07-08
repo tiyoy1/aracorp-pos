@@ -9,8 +9,12 @@ use App\Models\StockMovement;
 use App\Models\TransactionItem;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderItem;
+use App\Models\ReturnTransaction;
+use App\Models\ReturnItem;
 use App\Observers\PurchaseOrderObserver;
 use App\Observers\PurchaseOrderItemObserver;
+use App\Observers\ReturnTransactionObserver;
+use App\Observers\ReturnItemObserver;
 use App\Observers\StockMovementObserver;
 use App\Observers\TransactionItemObserver;
 use Illuminate\Support\ServiceProvider;
@@ -36,6 +40,8 @@ class AppServiceProvider extends ServiceProvider
         StockMovement::observe(StockMovementObserver::class);
         PurchaseOrder::observe(PurchaseOrderObserver::class);
         PurchaseOrderItem::observe(PurchaseOrderItemObserver::class);
+        ReturnTransaction::observe(ReturnTransactionObserver::class);
+        ReturnItem::observe(ReturnItemObserver::class);
     }
     
 

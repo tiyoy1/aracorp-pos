@@ -21,6 +21,11 @@ class Transaction extends Model
         return $this->belongsTo(User::class, 'cashier_id');
     }
 
+    public function returnTransactions(): HasMany
+    {
+        return $this->hasMany(ReturnTransaction::class);
+    }
+
     #[Override]
     public function __toString()
     {

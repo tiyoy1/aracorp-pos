@@ -40,10 +40,16 @@ class TransactionItemObserver
      */
     public function updated(TransactionItem $transactionItem): void
     {
-        if ($transactionItem->wasChanged('quantity')) { 
-            $transactionItem->stockMovement()->update([
-                'quantity' => $transactionItem->quantity,
-            ]);
+        if ($transactionItem->wasChanged('quantity')) {
+            // Only adjust the ORIGINAL sale movement (type 'out'), not any
+            // return movements that may exist against this same item
+            $transactionItem->stockMovements()
+                ->where('type', 'out')
+                ->latest()
+                ->first()
+                ?->update([
+                    'quantity' => $transactionItem->quantity,
+                ]);
         }
         $this->updateTransactionTotal($transactionItem);
     }
@@ -53,7 +59,8 @@ class TransactionItemObserver
      */
     public function deleted(TransactionItem $transactionItem): void
     {
-        $transactionItem->stockMovement()->delete();
+        // Delete all stock movements tied to this item (sale + any returns)
+        $transactionItem->stockMovements()->delete();
         $this->updateTransactionTotal($transactionItem);
     }
 

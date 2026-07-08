@@ -15,16 +15,22 @@ class TransactionsTable
     {
         return $table
             ->columns([
-                // Add invoice number column
                 TextColumn::make('invoice_number')
                     ->label('Invoice')
                     ->searchable()
                     ->weight('semibold')
                     ->color('primary'),
 
+                TextColumn::make('cashier.name')
+                    ->label('Cashier')
+                    ->searchable()
+                    ->placeholder('—')
+                    ->badge()
+                    ->color('gray'),
+
                 TextColumn::make('total_price')
                     ->label('Total')
-                    ->money('IDR')  // ← fix $ to Rp
+                    ->money('IDR')
                     ->sortable()
                     ->weight('semibold'),
 

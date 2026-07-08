@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use App\Models\TransactionItem;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Icon;
+use Illuminate\Support\Facades\DB;
 use BackedEnum;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Collection;
@@ -116,44 +117,69 @@ class Cashier extends Page
     public function confirmOrder(): void
     {
         if (empty($this->cart)) {
-            Notification::make()
-                ->title('Keranjang masih kosong!')
-                ->warning()
-                ->send();
-            return;
-
-        }
-
-        // Generate invoice number
-        $invoice = 'INV-' . now()->format('Ymd-His');
-
-        // Create transaction
-        $transaction = Transaction::create([
-            'invoice_number' => $invoice,
-            'total_price'    => $this->getTotal(),
-            'cashier_id'     => Auth::id()
-        ]);
-
-        // Create each transaction item
-        // TransactionItemObserver handles stock deduction automatically
-        foreach ($this->cart as $item) {
-            TransactionItem::create([
-                'transaction_id' => $transaction->id,
-                'product_id'     => $item['product_id'],
-                'quantity'       => $item['quantity'],
-                'price'          => $item['price'],
-                'subtotal'       => $item['subtotal'],
-            ]);
-        }
-
-        // Clear cart after successful order
-        $this->cart = [];
-        $this->search = '';
-
         Notification::make()
-            ->title('Transaksi berhasil! 🎉')
-            ->body("Invoice: {$invoice}")
-            ->success()
+            ->title('Keranjang masih kosong!')
+            ->warning()
             ->send();
+        return;
+    }
+
+    try {
+        DB::transaction(function () {
+            // Lock every product row involved, sorted by id to keep lock order
+            // consistent across concurrent carts (prevents deadlocks between
+            // two orders that share products but add them in different sequences)
+            $productIds = collect($this->cart)->pluck('product_id')->sort()->values();
+
+            $lockedProducts = Product::whereIn('id', $productIds)
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('id');
+
+            // Re-verify stock against the freshly locked values — not the
+            // possibly-stale numbers the cart was built from earlier
+            foreach ($this->cart as $item) {
+                $product = $lockedProducts->get($item['product_id']);
+
+                if (! $product || $product->stock < $item['quantity']) {
+                    throw new \RuntimeException(
+                        "Stok " . ($product->name ?? 'produk') . " tidak cukup!"
+                    );
+                }
+            }
+
+            $invoice = 'INV-' . now()->format('Ymd-His');
+
+            $transaction = Transaction::create([
+                'invoice_number' => $invoice,
+                'total_price'    => $this->getTotal(),
+                'cashier_id'     => Auth::id(),
+            ]);
+
+            foreach ($this->cart as $item) {
+                TransactionItem::create([
+                    'transaction_id' => $transaction->id,
+                    'product_id'     => $item['product_id'],
+                    'quantity'       => $item['quantity'],
+                    'price'          => $item['price'],
+                    'subtotal'       => $item['subtotal'],
+                ]);
+            }
+
+            $this->cart = [];
+            $this->search = '';
+
+            Notification::make()
+                ->title('Transaksi berhasil! 🎉')
+                ->body("Invoice: {$invoice}")
+                ->success()
+                ->send();
+        });
+    } catch (\RuntimeException $e) {
+        Notification::make()
+            ->title($e->getMessage())
+            ->danger()
+            ->send();
+    }
     }
 }
